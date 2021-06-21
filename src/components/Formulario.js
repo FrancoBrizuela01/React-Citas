@@ -1,8 +1,9 @@
-import React, { Fragment, useState } from "react";
-//import uuid from 'uuid/v4';
-//const { v4: uuidv4 } = require("uuid");
+import React, { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+import PropTypes from "prop-types";
 
-const Formulario = () => {
+
+const Formulario = ({ crearCita }) => {
   //Crear state de Citas
   const [cita, actualizarCita] = useState({
     mascota: "",
@@ -17,7 +18,7 @@ const Formulario = () => {
   const actualizarState = (e) => {
     actualizarCita({
       ...cita, //tomamos una copia
-      [e.target.name]: e.target.value, //guardo el valor (value) en el campo  (e.target.name (ej: mascota))
+      [e.target.name]: e.target.value, //guardo el valor (value) en el  campo)
     });
   };
 
@@ -45,15 +46,23 @@ const Formulario = () => {
     actualizarError(false);
 
     // Asiganar un ID
-    //cita.id = uuidv4(); //libreria q se instala en el git para generar un id. (instalacion: npm i uud )
+    cita.id = uuidv4(); //libreria q se instala en el git para generar un id. (instalacion: npm i uud )
 
     // Crear la cita
+    crearCita(cita);
 
     // Reiniciar el form
+    actualizarCita({
+      mascota: "",
+      propietario: "",
+      fecha: "",
+      hora: "",
+      sintomas: "",
+    });
   };
 
   return (
-    <Fragment>
+    <>
       <h2>Crear Cita</h2>
 
       {error ? (
@@ -74,7 +83,7 @@ const Formulario = () => {
         <label for="">Nombre Dueño</label>
         <input
           type="text"
-          name="propietatio"
+          name="propietario"
           className="u-full-width"
           placeholder="Nombre Dueño de la mascota"
           onChange={actualizarState}
@@ -111,8 +120,12 @@ const Formulario = () => {
           Agregar Cita
         </button>
       </form>
-    </Fragment>
+    </>
   );
 };
+
+Formulario.promptType = {
+    crearCita: PropTypes.func.isRequired
+}
 
 export default Formulario;
